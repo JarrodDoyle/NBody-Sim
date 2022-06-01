@@ -21,14 +21,14 @@ internal static class Program
         InitWindow(1280, 720, "Raylib + Dear ImGui app");
 
         ImGuiController.Setup();
-        var uiLayers = new List<BaseUiLayer> {new ExampleLayer {Open = true}};
+        var uiLayers = new List<BaseUiLayer> {new SimControllerLayer {Open = true}};
         foreach (BaseUiLayer layer in uiLayers)
             layer.Attach();
 
         // Create some bodies
-        var bodies = new List<Body>();
-        bodies.Add(new Body(Vector3.Zero, Vector3.Zero, 100, 2));
-        bodies.Add(new Body(new Vector3(0, 0, 2), new Vector3(0, 7.5f, 0), 1, 1));
+        World.InitialBodies.Add(new Body(Vector3.Zero, Vector3.Zero, 100, 2));
+        World.InitialBodies.Add(new Body(new Vector3(0, 0, 2), new Vector3(0, 7.5f, 0), 1, 1));
+        World.Reset();
 
         // Camera woo!
         var camera = new Camera3D
@@ -51,14 +51,7 @@ internal static class Program
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE)) playing = !playing;
 
             // Update bodies
-            var timeStep = Raylib.GetFrameTime() / 1;
-            if (playing)
-            {
-                foreach (var body in bodies)
-                    body.UpdateVelocity(bodies, timeStep);
-                foreach (var body in bodies)
-                    body.UpdatePosition(timeStep);
-            }
+            if (playing) World.Update(Raylib.GetFrameTime() / 1);
 
             Raylib.UpdateCamera(ref camera);
 
@@ -66,7 +59,7 @@ internal static class Program
             Raylib.ClearBackground(Color.RAYWHITE);
 
             Raylib.BeginMode3D(camera);
-            foreach (var body in bodies)
+            foreach (var body in World.Bodies)
                 Raylib.DrawSphere(body.Position * 10, body.Radius, Color.RED);
             Raylib.EndMode3D();
 
