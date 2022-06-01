@@ -9,7 +9,7 @@ internal static class Program
 {
     private static void InitWindow(int width, int height, string title)
     {
-        Raylib.SetConfigFlags(ConfigFlags.FLAG_MSAA_4X_HINT | ConfigFlags.FLAG_VSYNC_HINT |
+        Raylib.SetConfigFlags(ConfigFlags.FLAG_MSAA_4X_HINT |
                               ConfigFlags.FLAG_WINDOW_RESIZABLE);
         Raylib.SetTraceLogLevel(TraceLogLevel.LOG_WARNING);
         Raylib.InitWindow(width, height, title);
@@ -26,8 +26,18 @@ internal static class Program
             layer.Attach();
 
         // Create some bodies
-        World.InitialBodies.Add(new Body(Vector3.Zero, Vector3.Zero, 100, 2));
-        World.InitialBodies.Add(new Body(new Vector3(0, 0, 2), new Vector3(0, 7.5f, 0), 1, 1));
+        var rnd = new Random();
+        var numBodies = 1000;
+        for (int i = 0; i < numBodies; i++)
+        {
+            var position = new Vector3(rnd.NextSingle(), rnd.NextSingle(), rnd.NextSingle());
+            var velocity = new Vector3(rnd.NextSingle(), rnd.NextSingle(), rnd.NextSingle());
+            var mass = rnd.Next(1, 100);
+            var radius = 1;
+            World.InitialBodies.Add(new Body(position, velocity, mass, radius));
+        }
+        // World.InitialBodies.Add(new Body(Vector3.Zero, Vector3.Zero, 100, 2));
+        // World.InitialBodies.Add(new Body(new Vector3(0, 0, 2), new Vector3(0, 7.5f, 0), 1, 1));
         World.Reset();
 
         // Camera woo!
@@ -51,12 +61,12 @@ internal static class Program
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE)) playing = !playing;
 
             // Update bodies
-            if (playing) World.Update(Raylib.GetFrameTime() / 1);
+            if (playing) World.Update(Raylib.GetFrameTime() / 1000);
 
             Raylib.UpdateCamera(ref camera);
 
             Raylib.BeginDrawing();
-            Raylib.ClearBackground(Color.RAYWHITE);
+            Raylib.ClearBackground(Color.BLACK);
 
             Raylib.BeginMode3D(camera);
             foreach (var body in World.Bodies)
