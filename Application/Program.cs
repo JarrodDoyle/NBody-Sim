@@ -1,4 +1,5 @@
-﻿using Application.UI;
+﻿using System.Numerics;
+using Application.UI;
 using Raylib_cs;
 using ImGuiNET;
 
@@ -18,29 +19,64 @@ internal static class Program
     private static void Main()
     {
         InitWindow(1280, 720, "Raylib + Dear ImGui app");
-        
+
         ImGuiController.Setup();
         var uiLayers = new List<BaseUiLayer> {new ExampleLayer {Open = true}};
         foreach (BaseUiLayer layer in uiLayers)
             layer.Attach();
+
+        // Create some bodies
+        var bodies = new List<Body>();
+        bodies.Add(new Body(Vector3.Zero, Vector3.Zero, 100, 2));
+        bodies.Add(new Body(new Vector3(0, 0, 2), new Vector3(0, 7.5f, 0), 1, 1));
+
+        // Camera woo!
+        var camera = new Camera3D
+        {
+            position = new Vector3(-10, 0, 0),
+            target = Vector3.Zero,
+            up = Vector3.UnitY,
+            fovy = 60,
+            projection = CameraProjection.CAMERA_PERSPECTIVE
+        };
+        Raylib.SetCameraMode(camera, CameraMode.CAMERA_FREE);
+
+        var playing = false;
 
         while (!Raylib.WindowShouldClose())
         {
             foreach (BaseUiLayer layer in uiLayers)
                 layer.Update();
 
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE)) playing = !playing;
+
+            // Update bodies
+            var timeStep = Raylib.GetFrameTime() / 1;
+            if (playing)
+            {
+                foreach (var body in bodies)
+                    body.UpdateVelocity(bodies, timeStep);
+                foreach (var body in bodies)
+                    body.UpdatePosition(timeStep);
+            }
+
+            Raylib.UpdateCamera(ref camera);
+
             Raylib.BeginDrawing();
-            
             Raylib.ClearBackground(Color.RAYWHITE);
-            Raylib.DrawFPS(0, 0);
+
+            Raylib.BeginMode3D(camera);
+            foreach (var body in bodies)
+                Raylib.DrawSphere(body.Position * 10, body.Radius, Color.RED);
+            Raylib.EndMode3D();
 
             ImGuiController.Begin();
             ImGui.DockSpaceOverViewport(ImGui.GetMainViewport(), ImGuiDockNodeFlags.PassthruCentralNode);
-            ImGui.ShowDemoWindow();
             foreach (BaseUiLayer layer in uiLayers)
                 layer.Render();
             ImGuiController.End();
 
+            Raylib.DrawFPS(0, 0);
             Raylib.EndDrawing();
         }
 
