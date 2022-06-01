@@ -21,13 +21,16 @@ public class Body
 
     public void UpdateVelocity(IEnumerable<Body> bodies, float timeStep)
     {
+        var totalForce = Vector3.Zero;
         foreach (var other in bodies)
         {
             if (other == this) continue;
-            
             var dst = other.Position - Position;
-            Velocity += timeStep * _g * Vector3.Normalize(dst) * other.Mass / dst.LengthSquared();
+            totalForce += other.Mass * dst / (dst.Length() * dst.LengthSquared());
         }
+
+        var accel = totalForce * _g;
+        Velocity += accel * timeStep;
     }
 
     public void UpdatePosition(float timeStep)
