@@ -33,11 +33,10 @@ internal static class Program
             var position = new Vector3(rnd.NextSingle(), rnd.NextSingle(), rnd.NextSingle());
             var velocity = new Vector3(rnd.NextSingle(), rnd.NextSingle(), rnd.NextSingle());
             var mass = rnd.Next(1, 100);
-            var radius = 1;
+            var radius = rnd.NextSingle() + 0.5f;
             World.InitialBodies.Add(new Body(position, velocity, mass, radius));
         }
-        // World.InitialBodies.Add(new Body(Vector3.Zero, Vector3.Zero, 100, 2));
-        // World.InitialBodies.Add(new Body(new Vector3(0, 0, 2), new Vector3(0, 7.5f, 0), 1, 1));
+
         World.Reset();
 
         // Camera woo!
@@ -70,7 +69,7 @@ internal static class Program
 
             Raylib.BeginMode3D(camera);
             foreach (var body in World.Bodies)
-                Raylib.DrawSphere(body.Position * 10, body.Radius, Color.RED);
+                Raylib.DrawCube(body.Position * 10, body.Radius, body.Radius, body.Radius, Color.RED);
             Raylib.EndMode3D();
 
             ImGuiController.Begin();
