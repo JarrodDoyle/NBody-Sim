@@ -17,12 +17,11 @@ public static class World
     public static void Update(float timeStep)
     {
         _tasks.Clear();
+        var bodiesArr = Bodies.ToArray();
         foreach (var body in Bodies)
-            _tasks.Add(Task.Run(() => body.UpdateVelocity(Bodies, timeStep)));
+            _tasks.Add(Task.Run(() => body.UpdateVelocity(bodiesArr, timeStep)));
         Task.WaitAll(_tasks.ToArray());
 
-        // foreach (var body in Bodies)
-        //     body.UpdateVelocity(Bodies, timeStep);
         foreach (var body in Bodies)
             body.UpdatePosition(timeStep);
     }

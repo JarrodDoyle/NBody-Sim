@@ -10,6 +10,7 @@ public class Body
     public float Radius { get; set; }
 
     private static readonly float _g = 1f;
+    private static readonly float _e2 = 0.0001f;
 
     public Body(Vector3 position, Vector3 velocity, float mass, float radius)
     {
@@ -19,7 +20,7 @@ public class Body
         Radius = radius;
     }
 
-    public void UpdateVelocity(IEnumerable<Body> bodies, float timeStep)
+    public void UpdateVelocity(Body[] bodies, float timeStep)
     {
         var totalForce = Vector3.Zero;
         foreach (var other in bodies)
