@@ -104,6 +104,7 @@ internal static class Program
         var io = ImGui.GetIO();
         if (io.WantCaptureMouse || io.WantCaptureKeyboard) return;
 
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_R)) World.Reset();
         if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE)) playing = !playing;
         if (Raylib.IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
         {
