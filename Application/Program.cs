@@ -21,7 +21,11 @@ internal static class Program
         InitWindow(1280, 720, "Raylib + Dear ImGui app");
 
         ImGuiController.Setup();
-        var uiLayers = new List<BaseUiLayer> {new SimControllerLayer {Open = true}};
+        var uiLayers = new List<BaseUiLayer>
+        {
+            new SimControllerLayer {Open = true},
+            new BodyEditorLayer()
+        };
         foreach (BaseUiLayer layer in uiLayers)
             layer.Attach();
 
@@ -56,10 +60,10 @@ internal static class Program
 
         while (!Raylib.WindowShouldClose())
         {
+            HandleInput(ref playing, camera);
+
             foreach (BaseUiLayer layer in uiLayers)
                 layer.Update();
-
-            if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE)) playing = !playing;
 
             // Update bodies
             if (playing) World.Update(Raylib.GetFrameTime() / 1000);
@@ -72,6 +76,13 @@ internal static class Program
             Raylib.BeginMode3D(camera);
             foreach (var body in World.Bodies)
                 Raylib.DrawModel(bodyModel, body.Position * 100, body.Radius, body.Color);
+
+            if (World.SelectedIndex != -1)
+            {
+                var body = World.Bodies[World.SelectedIndex];
+                Raylib.DrawModelWires(bodyModel, body.Position * 100, body.Radius + 0.1f, Color.WHITE);
+            }
+
             Raylib.EndMode3D();
 
             ImGuiController.Begin();
@@ -86,5 +97,29 @@ internal static class Program
 
         ImGuiController.Shutdown();
         Raylib.CloseWindow();
+    }
+
+    private static void HandleInput(ref bool playing, Camera3D camera)
+    {
+        var io = ImGui.GetIO();
+        if (io.WantCaptureMouse || io.WantCaptureKeyboard) return;
+
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE)) playing = !playing;
+        if (Raylib.IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
+        {
+            World.SelectedIndex = -1;
+            var ray = Raylib.GetMouseRay(Raylib.GetMousePosition(), camera);
+            var dist = float.MaxValue;
+            for (var i = 0; i < World.Bodies.Count; i++)
+            {
+                var body = World.Bodies[i];
+                var collision = Raylib.GetRayCollisionSphere(ray, body.Position * 100, body.Radius);
+                if (collision.hit && collision.distance < dist)
+                {
+                    dist = collision.distance;
+                    World.SelectedIndex = i;
+                }
+            }
+        }
     }
 }

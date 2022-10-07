@@ -4,6 +4,7 @@ public static class World
 {
     public static List<Body> InitialBodies { get; set; } = new();
     public static List<Body> Bodies { get; } = new();
+    public static int SelectedIndex { get; set; } = -1;
     private static List<Task> _tasks = new();
 
     public static void Reset()
