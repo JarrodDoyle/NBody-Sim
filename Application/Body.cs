@@ -8,16 +8,18 @@ public class Body
     public Vector3 Velocity { get; set; }
     public float Mass { get; set; }
     public float Radius { get; set; }
+    public Raylib_cs.Color Color { get; set; }
 
     private static readonly float _g = 1f;
     private static readonly float _e2 = 0.0001f;
 
-    public Body(Vector3 position, Vector3 velocity, float mass, float radius)
+    public Body(Vector3 position, Vector3 velocity, float mass, float radius, Raylib_cs.Color color)
     {
         Position = position;
         Velocity = velocity;
         Mass = mass;
         Radius = radius;
+        Color = color;
     }
 
     public void UpdateVelocity(Body[] bodies, float timeStep)

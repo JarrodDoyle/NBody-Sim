@@ -34,7 +34,8 @@ internal static class Program
             var velocity = new Vector3(rnd.NextSingle(), rnd.NextSingle(), rnd.NextSingle());
             var mass = rnd.Next(1, 100);
             var radius = rnd.NextSingle() + 0.5f;
-            World.InitialBodies.Add(new Body(position, velocity, mass, radius));
+            var color = new Color(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256), 255);
+            World.InitialBodies.Add(new Body(position, velocity, mass, radius, color));
         }
 
         World.Reset();
@@ -51,6 +52,7 @@ internal static class Program
         Raylib.SetCameraMode(camera, CameraMode.CAMERA_FREE);
 
         var playing = false;
+        var bodyModel = Raylib.LoadModelFromMesh(Raylib.GenMeshSphere(1, 16, 16));
 
         while (!Raylib.WindowShouldClose())
         {
@@ -69,7 +71,7 @@ internal static class Program
 
             Raylib.BeginMode3D(camera);
             foreach (var body in World.Bodies)
-                Raylib.DrawCube(body.Position * 10, body.Radius, body.Radius, body.Radius, Color.RED);
+                Raylib.DrawModel(bodyModel, body.Position * 100, body.Radius, body.Color);
             Raylib.EndMode3D();
 
             ImGuiController.Begin();

@@ -10,7 +10,7 @@ public static class World
     {
         Bodies.Clear();
         foreach (var body in InitialBodies)
-            Bodies.Add(new Body(body.Position, body.Velocity, body.Mass, body.Radius));
+            Bodies.Add(new Body(body.Position, body.Velocity, body.Mass, body.Radius, body.Color));
         _tasks.Capacity = InitialBodies.Count;
     }
 
