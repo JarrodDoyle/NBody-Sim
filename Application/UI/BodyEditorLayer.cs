@@ -31,22 +31,22 @@ public class BodyEditorLayer : BaseUiLayer
             initialBody.Velocity = initialVelocity;
         
         var livePosition = liveBody.Position;
-        if (ImGui.InputFloat3("Initial Position", ref livePosition))
+        if (ImGui.InputFloat3("Live Position", ref livePosition))
             liveBody.Position = livePosition;
 
         var liveVelocity = liveBody.Velocity;
-        if (ImGui.InputFloat3("Initial Velocity", ref liveVelocity))
+        if (ImGui.InputFloat3("Live Velocity", ref liveVelocity))
             liveBody.Velocity = liveVelocity;
 
         var mass = initialBody.Mass;
-        if (ImGui.DragFloat("Mass", ref mass, 1, 1000))
+        if (ImGui.DragFloat("Mass", ref mass, 1, 1, 100))
         {
             initialBody.Mass = mass;
             liveBody.Mass = mass;
         }
         
         var radius = initialBody.Radius;
-        if (ImGui.DragFloat("Radius", ref radius, 1, 1000))
+        if (ImGui.DragFloat("Radius", ref radius, 1, 1, 100))
         {
             initialBody.Radius = radius;
             liveBody.Radius = radius;
