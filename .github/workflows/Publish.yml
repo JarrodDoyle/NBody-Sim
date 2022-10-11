@@ -1,4 +1,4 @@
-name: Linux (x64)
+name: Publish
 
 on:
   push:
@@ -12,6 +12,7 @@ jobs:
 
     strategy:
       matrix:
+        runtime: [win-x64, linux-x64]
         configuration: [Debug, Release]
 
     runs-on: ubuntu-latest
@@ -29,11 +30,11 @@ jobs:
 
     - name: Publish
       working-directory: Application
-      run: dotnet publish -c ${{matrix.configuration}} -r linux-x64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true -p:IncludeNativeLibrariesForSelfExtract=true
+      run: dotnet publish -c ${{matrix.configuration}} -r ${{matrix.runtime}} --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true -p:IncludeNativeLibrariesForSelfExtract=true
     
     - uses: actions/upload-artifact@v3
       with:
-        name: sim-artifact
+        name: artifact-${{matrix.runtime}}-${{matrix.configuration}}
         path: |
-          Application/bin/${{matrix.configuration}}/net6.0/linux-x64/publish/*
-          !Application/bin/${{matrix.configuration}}/net6.0/linux-x64/publish/*.pdb
+          Application/bin/${{matrix.configuration}}/net6.0/${{matrix.runtime}}/publish/*
+          !Application/bin/${{matrix.configuration}}/net6.0/${{matrix.runtime}}/publish/*.pdb
