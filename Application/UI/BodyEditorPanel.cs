@@ -3,7 +3,7 @@ using ImGuiNET;
 
 namespace Application.UI;
 
-public class BodyEditorLayer : BaseUiLayer
+public class BodyEditorPanel : Panel
 {
     public override void Attach()
     {

@@ -2,14 +2,16 @@ using ImGuiNET;
 
 namespace Application.UI;
 
-public class SimControllerLayer : BaseUiLayer
+public class SimControllerLayer : Panel
 {
     public override void Attach()
     {
+        Open = true;
     }
 
     public override void Detach()
     {
+        Open = false;
     }
 
     public override void Render()
