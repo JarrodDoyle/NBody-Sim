@@ -21,15 +21,7 @@ internal static class Program
     private static void Main()
     {
         InitWindow(1280, 720, "Raylib + Dear ImGui app");
-
-        ImGuiController.Setup();
-        var uiLayers = new List<BaseUiLayer>
-        {
-            new SimControllerLayer {Open = true},
-            new BodyEditorLayer()
-        };
-        foreach (BaseUiLayer layer in uiLayers)
-            layer.Attach();
+        UI.UiManager.Setup();
 
         // Create some bodies
         var rnd = new Random();
@@ -64,9 +56,7 @@ internal static class Program
         while (!Raylib.WindowShouldClose())
         {
             HandleInput(ref Playing, camera);
-
-            foreach (BaseUiLayer layer in uiLayers)
-                layer.Update();
+            UiManager.Update();
 
             // Update bodies
             if (Playing) World.Update(Raylib.GetFrameTime() / 1000);
@@ -88,17 +78,13 @@ internal static class Program
 
             Raylib.EndMode3D();
 
-            ImGuiController.Begin();
-            ImGui.DockSpaceOverViewport(ImGui.GetMainViewport(), ImGuiDockNodeFlags.PassthruCentralNode);
-            foreach (BaseUiLayer layer in uiLayers)
-                layer.Render();
-            ImGuiController.End();
+            UiManager.Render();
 
             Raylib.DrawFPS(0, 0);
             Raylib.EndDrawing();
         }
 
-        ImGuiController.Shutdown();
+        ImGuiBackend.Shutdown();
         Raylib.CloseWindow();
     }
 
