@@ -12,11 +12,20 @@ public static class UiManager
         ImGuiBackend.Setup();
         SetStyle();
 
+        foreach (var panel in Panels)
+            panel.Detach();
         Panels.Clear();
         Panels.Add(new SimControllerLayer());
         Panels.Add(new BodyEditorPanel());
         foreach (var panel in Panels)
             panel.Attach();
+    }
+
+    public static void Shutdown()
+    {
+        foreach (var panel in Panels)
+            panel.Detach();
+        ImGuiBackend.Shutdown();
     }
 
     public static void Update()

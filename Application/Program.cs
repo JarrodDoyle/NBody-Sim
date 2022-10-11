@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using Application.UI;
 using Raylib_cs;
 using ImGuiNET;
 
@@ -56,7 +55,7 @@ internal static class Program
         while (!Raylib.WindowShouldClose())
         {
             HandleInput(ref Playing, camera);
-            UiManager.Update();
+            UI.UiManager.Update();
 
             // Update bodies
             if (Playing) World.Update(Raylib.GetFrameTime() / 1000);
@@ -78,13 +77,13 @@ internal static class Program
 
             Raylib.EndMode3D();
 
-            UiManager.Render();
+            UI.UiManager.Render();
 
             Raylib.DrawFPS(0, 0);
             Raylib.EndDrawing();
         }
 
-        ImGuiBackend.Shutdown();
+        UI.UiManager.Shutdown();
         Raylib.CloseWindow();
     }
 
