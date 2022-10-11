@@ -16,9 +16,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    env:
-      BUILD_DIR: Release
-
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -38,5 +35,5 @@ jobs:
       with:
         name: sim-artifact
         path: |
-          Application/bin/${{matrix.conficuration}}/net6.0/linux-x64/publish/*
-          !Application/bin/${{matrix.conficuration}}/net6.0/linux-x64/publish/*.pdb
+          Application/bin/${{matrix.configuration}}/net6.0/linux-x64/publish/*
+          !Application/bin/${{matrix.configuration}}/net6.0/linux-x64/publish/*.pdb
