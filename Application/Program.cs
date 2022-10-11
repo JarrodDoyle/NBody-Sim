@@ -36,7 +36,9 @@ internal static class Program
         var numBodies = 1000;
         for (int i = 0; i < numBodies; i++)
         {
-            var position = new Vector3(rnd.NextSingle(), rnd.NextSingle(), rnd.NextSingle());
+            var direction = new Vector3(rnd.NextSingle(), rnd.NextSingle(), rnd.NextSingle());
+            var scaledNormalDirection = Vector3.Normalize(direction * 2 - Vector3.One);
+            var position = scaledNormalDirection * rnd.NextSingle();
             var velocity = new Vector3(rnd.NextSingle(), rnd.NextSingle(), rnd.NextSingle());
             var mass = rnd.Next(1, 100);
             var radius = Math.Clamp(rnd.NextSingle() * 2, 0.2f, 2f);
