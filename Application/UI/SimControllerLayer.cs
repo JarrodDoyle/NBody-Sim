@@ -24,7 +24,7 @@ public class SimControllerLayer : Panel
         ImGui.Checkbox("Playing", ref Program.Playing);
         ImGui.End();
 
-        Open = isOpen;
+        if (!isOpen) Detach();
     }
 
     public override void Update()
