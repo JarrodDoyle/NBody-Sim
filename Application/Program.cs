@@ -7,6 +7,8 @@ namespace Application;
 
 internal static class Program
 {
+    public static bool Playing;
+    
     private static void InitWindow(int width, int height, string title)
     {
         Raylib.SetConfigFlags(ConfigFlags.FLAG_MSAA_4X_HINT |
@@ -55,18 +57,17 @@ internal static class Program
         };
         Raylib.SetCameraMode(camera, CameraMode.CAMERA_FREE);
 
-        var playing = false;
         var bodyModel = Raylib.LoadModelFromMesh(Raylib.GenMeshSphere(1, 16, 16));
 
         while (!Raylib.WindowShouldClose())
         {
-            HandleInput(ref playing, camera);
+            HandleInput(ref Playing, camera);
 
             foreach (BaseUiLayer layer in uiLayers)
                 layer.Update();
 
             // Update bodies
-            if (playing) World.Update(Raylib.GetFrameTime() / 1000);
+            if (Playing) World.Update(Raylib.GetFrameTime() / 1000);
 
             Raylib.UpdateCamera(ref camera);
 

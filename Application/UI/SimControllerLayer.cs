@@ -19,6 +19,7 @@ public class SimControllerLayer : BaseUiLayer
 
         ImGui.Begin("Sim Controller", ref isOpen);
         if (ImGui.Button("Reset")) World.Reset();
+        ImGui.Checkbox("Playing", ref Program.Playing);
         ImGui.End();
 
         Open = isOpen;
