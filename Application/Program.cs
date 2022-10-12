@@ -37,6 +37,7 @@ internal static class Program
         Raylib.SetCameraMode(camera, CameraMode.CAMERA_FREE);
 
         var bodyModel = Raylib.LoadModelFromMesh(Raylib.GenMeshSphere(1, 16, 16));
+        var frustum = new Frustum();
 
         while (!Raylib.WindowShouldClose())
         {
@@ -52,8 +53,15 @@ internal static class Program
             Raylib.ClearBackground(Color.BLACK);
 
             Raylib.BeginMode3D(camera);
+            frustum.UpdatePlanes();
+            var bodiesInFrustum = 0;
             foreach (var body in World.Bodies)
+            {
+                if (frustum.SphereInFrustum(body.Position * 100, body.Radius)) bodiesInFrustum++;
+                else continue;
                 Raylib.DrawModel(bodyModel, body.Position * 100, body.Radius, body.Color);
+            }
+            Console.WriteLine(bodiesInFrustum);
 
             if (World.SelectedIndex != -1)
             {
