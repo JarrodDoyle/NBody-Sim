@@ -23,20 +23,6 @@ internal static class Program
         UI.UiManager.Setup();
 
         // Create some bodies
-        var rnd = new Random();
-        var numBodies = 1000;
-        for (int i = 0; i < numBodies; i++)
-        {
-            var direction = new Vector3(rnd.NextSingle(), rnd.NextSingle(), rnd.NextSingle());
-            var scaledNormalDirection = Vector3.Normalize(direction * 2 - Vector3.One);
-            var position = scaledNormalDirection * rnd.NextSingle();
-            var velocity = new Vector3(rnd.NextSingle(), rnd.NextSingle(), rnd.NextSingle());
-            var mass = rnd.Next(1, 100);
-            var radius = Math.Clamp(rnd.NextSingle() * 2, 0.2f, 2f);
-            var color = new Color(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256), 255);
-            World.InitialBodies.Add(new Body(position, velocity, mass, radius, color));
-        }
-
         World.Reset();
 
         // Camera woo!
