@@ -7,7 +7,7 @@ namespace Application;
 internal static class Program
 {
     public static bool Playing;
-    
+
     private static void InitWindow(int width, int height, string title)
     {
         Raylib.SetConfigFlags(ConfigFlags.FLAG_MSAA_4X_HINT |
@@ -54,19 +54,17 @@ internal static class Program
 
             Raylib.BeginMode3D(camera);
             frustum.UpdatePlanes();
-            var bodiesInFrustum = 0;
             foreach (var body in World.Bodies)
             {
-                if (frustum.SphereInFrustum(body.Position * 100, body.Radius)) bodiesInFrustum++;
-                else continue;
-                Raylib.DrawModel(bodyModel, body.Position * 100, body.Radius, body.Color);
+                if (frustum.SphereInFrustum(body.Position * 100, body.Radius))
+                    Raylib.DrawModel(bodyModel, body.Position * 100, body.Radius, body.Color);
             }
-            Console.WriteLine(bodiesInFrustum);
 
             if (World.SelectedIndex != -1)
             {
                 var body = World.Bodies[World.SelectedIndex];
-                Raylib.DrawModelWires(bodyModel, body.Position * 100, body.Radius + 0.1f, Color.WHITE);
+                if (frustum.SphereInFrustum(body.Position * 100, body.Radius))
+                    Raylib.DrawModelWires(bodyModel, body.Position * 100, body.Radius + 0.1f, Color.WHITE);
             }
 
             Raylib.EndMode3D();
